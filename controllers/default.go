@@ -37,3 +37,17 @@ func (c *SearchController) Post() {
 	c.Data["text"] = jsoninfo
 	c.TplName = "index.html"
 }
+
+
+/*************  LOGIN  ******************/
+type LoginController struct {
+	beego.Controller
+}
+
+func (c *LoginController) Get() {
+	c.TplName = "index.html"
+}
+
+func (c *LoginController) Post() {
+	c.TplName = "index.html"
+}

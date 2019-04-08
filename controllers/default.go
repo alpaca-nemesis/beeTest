@@ -29,13 +29,13 @@ type SearchController struct {
 }
 
 func (c *SearchController) Get() {
-	c.TplName = "index.html"
+	c.TplName = "search.html"
 }
 
 func (c *SearchController) Post() {
 	jsoninfo := c.GetString("content")
 	c.Data["text"] = jsoninfo
-	c.TplName = "index.html"
+	c.TplName = "search.html"
 }
 
 
@@ -45,9 +45,9 @@ type LoginController struct {
 }
 
 func (c *LoginController) Get() {
-	c.TplName = "index.html"
+	c.TplName = "search.html"
 }
 
 func (c *LoginController) Post() {
-	c.TplName = "index.html"
+	c.TplName = "search.html"
 }

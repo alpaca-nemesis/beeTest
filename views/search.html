@@ -32,19 +32,7 @@
 	<body>
 		
 	<div class="fh5co-loader"></div>
-
-	<nav class="fh5co-nav" role="navigation">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12 text-right">
-					<div id="fh5co-logo">
-						<a href="javascript:void(0)" data-toggle="modal" data-target="#login">登录</a>
-						<a href="javascript:void(0)" data-toggle="modal" data-target="#register">注册</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</nav>
+	{{template "welcome.html" .}}
 	
 	<div id="page">
 
@@ -58,7 +46,7 @@
 							<h1>We Are Coming Very Soon!</h1>
 							<div class="row">
 								<h2>{{.text}}</h2>
-								<form class="form-inline" id="fh5co-header-subscribe" action="/search" method="post">
+								<form class="form-inline" id="fh5co-header-subscribe" action="/search" method="get">
 									<div class="col-md-12 col-md-offset-0">
 										<div class="form-group">
 											<input type="text" class="form-control" id="content" name ="content" placeholder="Enter the content">
@@ -74,62 +62,6 @@
 		</div>
 	</header>
 
-		<body>
-		<!-- 注册窗口 -->
-		<div id="register" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-body">
-						<button class="close" data-dismiss="modal">
-							<span>&times;</span>
-						</button>
-					</div>
-					<div class="modal-title">
-						<h1 class="text-center">用户注册</h1>
-					</div>
-					<div class="modal-body">
-							<h4 class="text-center">暂未开放   </h4>
-							<div class="text-right">
-								<button class="btn btn-danger" data-dismiss="modal">取消</button>
-							</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- 登录窗口 -->
-		<div id="login" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-body">
-						<button class="close" data-dismiss="modal">
-							<span>&times;</span>
-						</button>
-					</div>
-					<div class="modal-title">
-						<h1 class="text-center">用户登录</h1>
-					</div>
-					<div class="modal-body">
-						<form class="form-group" action="/login">
-							<div class="form-group">
-								<label for="">用户名</label>
-								<input class="form-control" type="text" name="username" placeholder="Username">
-							</div>
-							<div class="form-group">
-								<label for="">密码</label>
-								<input class="form-control" type="password" name="password" placeholder="Password">
-							</div>
-							<div class="text-right">
-								<button class="btn btn-primary" type="submit">登录</button>
-								<button class="btn btn-danger" data-dismiss="modal">取消</button>
-							</div>
-							<a href="" data-toggle="modal" data-dismiss="modal" data-target="#register">还没有账号？点我注册</a>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		</body>
 
 
 	<footer id="fh5co-footer" role="contentinfo">

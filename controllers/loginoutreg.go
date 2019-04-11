@@ -12,8 +12,8 @@ type LoginController struct {
 }
 
 func (c *LoginController) Post() {
-	username:=c.GetString("username")
-	password:=c.GetString("password")
+	username := c.GetString("username")
+	password := c.GetString("password")
 
 	o := orm.NewOrm()
 
@@ -21,18 +21,17 @@ func (c *LoginController) Post() {
 	user.Username = username
 
 	err := o.Read(&user, "Username")
-	if err != nil{
+	if err != nil {
 		c.Ctx.WriteString("用户不存在")
-	}else if user.Password != password{
+	} else if user.Password != password {
 		c.Ctx.WriteString("密码不对")
-	}else{
+	} else {
 		c.Ctx.SetCookie("islogin", "1", 3600)
 		c.SetSession("username", username)
 		c.Redirect("/index", 302)
 	}
 
 }
-
 
 /*************  LOGOUT  ******************/
 type LogoutController struct {
@@ -48,15 +47,14 @@ func (c *LogoutController) Get() {
 	c.Redirect("/index", 302)
 }
 
-
 /*************  REGIST  ******************/
 type RegistController struct {
 	beego.Controller
 }
 
 func (c *RegistController) Post() {
-	username:=c.GetString("username")
-	password:=c.GetString("password")
+	username := c.GetString("username")
+	password := c.GetString("password")
 
 	o := orm.NewOrm()
 
@@ -66,10 +64,10 @@ func (c *RegistController) Post() {
 	user.Password = password
 
 	_, err := o.Insert(&user)
-	if err != nil{
+	if err != nil {
 		c.Redirect("/index", 302)
 		return
-	}else{
+	} else {
 		c.Redirect("/index", 302)
 	}
 	//c.TplName = "search.html"

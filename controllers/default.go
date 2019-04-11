@@ -5,7 +5,6 @@ import (
 	"github.com/astaxie/beego"
 )
 
-
 /*************  INDEX  ******************/
 type MainController struct {
 	beego.Controller
@@ -17,7 +16,6 @@ func (c *MainController) Get() {
 	c.TplName = "index.tpl"
 }
 
-
 /*************  INDEX  ******************/
 type IndexController struct {
 	beego.Controller
@@ -25,15 +23,14 @@ type IndexController struct {
 
 func (c *IndexController) Get() {
 	islogin := c.Ctx.GetCookie("islogin")
-	if islogin == ""{
+	if islogin == "0" {
 		c.Data["isLogin"] = 0
-	}else{
+	} else {
 		c.Data["isLogin"] = 1
 		c.Data["username"] = c.GetSession("username")
 	}
 	c.TplName = "index.html"
 }
-
 
 /*************  SEARCH  ******************/
 type SearchController struct {
@@ -42,7 +39,7 @@ type SearchController struct {
 
 func (c *SearchController) Get() {
 	islogin := c.Ctx.GetCookie("islogin")
-	if islogin == ""{
+	if islogin == "" {
 		c.Data["isLogin"] = 0
 		c.Redirect("/index", 302)
 	}
@@ -51,9 +48,3 @@ func (c *SearchController) Get() {
 
 	c.TplName = "result.html"
 }
-
-
-
-
-
-

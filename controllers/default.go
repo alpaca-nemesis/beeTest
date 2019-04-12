@@ -39,7 +39,7 @@ type SearchController struct {
 
 func (c *SearchController) Get() {
 	islogin := c.Ctx.GetCookie("islogin")
-	if islogin == "" {
+	if islogin == "0" {
 		c.Data["isLogin"] = 0
 		c.Redirect("/index", 302)
 	}

@@ -4,15 +4,15 @@
 		<!-- Mobile Specific Meta -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<!-- Author Meta -->
-		<meta name="author" content="colorlib">
+		<meta name="author" content="Crowix">
 		<!-- Meta Description -->
-		<meta name="description" content="">
+		<meta name="description" content="Search Engine">
 		<!-- Meta Keyword -->
-		<meta name="keywords" content="">
+		<meta name="keywords" content="Search Engine">
 		<!-- meta character set -->
 		<meta charset="UTF-8">
 		<!-- Site Title -->
-		<title>Personal</title>
+		<title>Search Engine</title>
 
 			<!--CSS -->
 			<link rel="stylesheet" href="../static/css/linearicons.css">
@@ -29,35 +29,19 @@
 		    <div class="container main-menu">
 		    	<div class="row align-items-center justify-content-between d-flex">
 			      <div id="logo">
-			        <a href="index.html"><img src="../static/img/logo.png" alt="" title="" /></a>
+			        <a href="/"><img src="../static/img/logo.png" alt="" title="" /></a>
 			      </div>
-			      <nav id="nav-menu-container">
-			        <ul class="nav-menu">
-			          <li><a href="index.html">Home</a></li>
-			          <li><a href="about.html">About</a></li>
-			          <li><a href="services.html">Services</a></li>
-			          <li><a href="portfolio.html">Portfolio</a></li>
-			          <li><a href="price.html">Pricing</a></li>
-			          <li class="menu-has-children"><a href="">Blog</a>
-			            <ul>
-			              <li><a href="blog-home.html">Blog Home</a></li>
-			              <li><a href="blog-single.html">Blog Single</a></li>
-			            </ul>
-			          </li>	
-			          <li class="menu-has-children"><a href="">Pages</a>
-			            <ul>
-		            	  <li><a href="elements.html">Elements</a></li>
-				          <li class="menu-has-children"><a href="">Level 2 </a>
-				            <ul>
-				              <li><a href="#">Item One</a></li>
-				              <li><a href="#">Item Two</a></li>
-				            </ul>
-				          </li>					                		
-			            </ul>
-			          </li>					          					          		          
-			          <li><a href="contact.html">Contact</a></li>
-			        </ul>
-			      </nav><!-- #nav-menu-container -->		    		
+					<nav id="nav-menu-container">
+						<ul class="nav-menu">
+							{{if .isLogin}}
+								<li><a>你好，{{.username}}</a></li>
+								<li><a href="/logout" >退出</a></li>
+							{{else}}
+								<li><a href="javascript:void(0)" data-toggle="modal" data-target="#login">登录</a></li>
+								<li><a href="javascript:void(0)" data-toggle="modal" data-target="#register">注册</a></li>
+							{{end}}
+						</ul>
+					</nav>
 		    	</div>
 		    </div>
 		  </header><!-- #header -->
@@ -84,17 +68,16 @@
 
 		  <section class="banner-area">
 			  <div class="container">
-				  <div class="row fullscreen align-items-center justify-content-between">
-					  <div class="col-lg-8 col-md-10 col-sm-5">
-						  <form target="_blank" action="/search" method="get">
+				  <div class="row fullscreen align-items-center">
+					  <div class="col-md-8 col-md-offset-2">
+						  <form  action="/search" method="get">
 							  <div class="input-group">
 								  <input type="text" class="form-control" name="content" placeholder="Enter the content" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter the content '" required="" type="text">
 								  <div class="input-group-btn">
-									  <button class="btn btn-primary" type="submit">
+									  <button class="btn btn-primary" type="submit" style="font-size: 1.3rem;">
 										  <span class="lnr lnr-arrow-right"></span>
 									  </button>
 								  </div>
-								  <div class="info"></div>
 							  </div>
 						  </form>
 					  </div>
@@ -110,19 +93,19 @@
 					<div class="row">
 						<div class="col-lg-3 col-md-6 single-fact">
 							<h1 class="counter">2536</h1>
-							<p>Projects Completed</p>
+							<p>设备信息</p>
 						</div>
 						<div class="col-lg-3 col-md-6 single-fact">
 							<h1 class="counter">6784</h1>
-							<p>Happy Clients</p>
+							<p>报警信息</p>
 						</div>
 						<div class="col-lg-3 col-md-6 single-fact">
 							<h1 class="counter">2239</h1>
-							<p>Cups of Coffee</p>
+							<p>维修记录</p>
 						</div>
 						<div class="col-lg-3 col-md-6 single-fact">
 							<h1 class="counter">435</h1>
-							<p>Real Professionals</p>
+							<p>其他信息</p>
 						</div>
 					</div>
 				</div>
@@ -136,9 +119,9 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="single-footer-widget">
-                                <h4>About Me</h4>
+                                <h4>声明</h4>
                                 <p>
-                                    We have tested a number of registry fix and clean utilities and present our top 3 list on our site for your convenience.
+                                    搜索结果仅供参考使用，具体信息请跟各团队负责人联系确认。
                                 </p>
                                 <p class="footer-text">
 									Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved</a>
@@ -165,7 +148,10 @@
 			<script src="../static/js/jquery.counterup.min.js"></script>
 			<script src="../static/js/simple-skillbar.js"></script>
 			<script src="../static/js/owl.carousel.min.js"></script>
-			<script src="../static/js/mail-script.js"></script>
 			<script src="../static/js/main.js"></script>
+
+
+		  {{template "login.html" .}}
+
 		</body>
 	</html>

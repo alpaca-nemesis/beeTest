@@ -48,3 +48,13 @@ func (c *SearchController) Get() {
 
 	c.TplName = "result.html"
 }
+
+
+/*************  SEARCH  ******************/
+type InterestingController struct {
+	beego.Controller
+}
+
+func (c *InterestingController) Get() {
+	c.TplName = "aaa.html"
+}

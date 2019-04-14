@@ -24,27 +24,9 @@
 			<link rel="stylesheet" href="../static/css/owl.carousel.css">
 			<link rel="stylesheet" href="../static/css/main.css">
 		</head>
-		<body>	
-		  <header id="header">
-		    <div class="container main-menu">
-		    	<div class="row align-items-center justify-content-between d-flex">
-			      <div id="logo">
-			        <a href="/"><img src="../static/img/logo.png" alt="" title="" /></a>
-			      </div>
-					<nav id="nav-menu-container">
-						<ul class="nav-menu">
-							{{if .isLogin}}
-								<li><a>你好，{{.username}}</a></li>
-								<li><a href="/logout" >退出</a></li>
-							{{else}}
-								<li><a href="javascript:void(0)" data-toggle="modal" data-target="#login">登录</a></li>
-								<li><a href="javascript:void(0)" data-toggle="modal" data-target="#register">注册</a></li>
-							{{end}}
-						</ul>
-					</nav>
-		    	</div>
-		    </div>
-		  </header><!-- #header -->
+		<body>
+
+			{{template "header.html" .}}
 
 {{/*			<!-- start banner Area -->*/}}
 {{/*			<section class="banner-area">*/}}
@@ -72,9 +54,9 @@
 					  <div class="col-md-8 col-md-offset-2">
 						  <form  action="/search" method="get">
 							  <div class="input-group">
-								  <input type="text" class="form-control" name="content" placeholder="Enter the content" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter the content '" required="" type="text">
+								  <input type="text" class="form-control" name="content" placeholder="请输入搜索内容" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter the content '" required="" type="text">
 								  <div class="input-group-btn">
-									  <button class="btn btn-primary" type="submit" style="font-size: 1.3rem;">
+									  <button class="btn btn-primary btn-fatter" type="submit" style="font-size: 1.3rem;">
 										  <span class="lnr lnr-arrow-right"></span>
 									  </button>
 								  </div>
@@ -112,26 +94,9 @@
 			</section>
 			<!-- end fact Area -->
 
+		  {{template "footer.html" .}}
 
-            <!-- start footer Area -->
-            <footer class="footer-area section-gap">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="single-footer-widget">
-                                <h4>声明</h4>
-                                <p>
-                                    搜索结果仅供参考使用，具体信息请跟各团队负责人联系确认。
-                                </p>
-                                <p class="footer-text">
-									Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved</a>
-								</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-            <!-- End footer Area -->		
+
 
 			<script src="../static/js/vendor/jquery-2.2.4.min.js"></script>
 			<script src="../static/js/popper.min.js"></script>

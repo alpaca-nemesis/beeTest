@@ -26,8 +26,9 @@ func (c *LoginController) Post() {
 	} else if user.Password != password {
 		c.Ctx.WriteString("密码不对")
 	} else {
-		c.Ctx.SetCookie("islogin", "1", 3600)
+		c.Ctx.SetCookie("username", "username", 3600*24*30)
 		c.SetSession("username", username)
+		c.SetSession("islogin", "1")
 		c.Redirect("/index", 302)
 	}
 
@@ -39,9 +40,10 @@ type LogoutController struct {
 }
 
 func (c *LogoutController) Get() {
-	c.Ctx.SetCookie("islogin", "0", 3600)
+	//c.Ctx.SetCookie("islogin", "0", 3600*24*30)
 	if c.GetSession("username") != nil {
 		c.DelSession("username")
+		c.DelSession("islogin")
 		c.DestroySession()
 	}
 	c.Redirect("/index", 302)

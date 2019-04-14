@@ -22,8 +22,8 @@ type IndexController struct {
 }
 
 func (c *IndexController) Get() {
-	islogin := c.Ctx.GetCookie("islogin")
-	if islogin == "0" {
+	islogin := c.GetSession("islogin")
+	if islogin == nil {
 		c.Data["isLogin"] = 0
 	} else {
 		c.Data["isLogin"] = 1
@@ -38,15 +38,19 @@ type SearchController struct {
 }
 
 func (c *SearchController) Get() {
-	islogin := c.Ctx.GetCookie("islogin")
-	if islogin == "0" {
+	islogin := c.GetSession("islogin")
+	if islogin == nil {
 		c.Data["isLogin"] = 0
 		c.Redirect("/index", 302)
+	}else{
+		var content string
+		c.Data["isLogin"] = 1
+		c.Data["username"] = c.GetSession("username")
+		c.Ctx.Input.Bind(&content, "content")
+		c.Data["content"] = content
+		c.TplName = "result.html"
 	}
-	c.Data["isLogin"] = 1
-	c.Data["username"] = c.GetSession("username")
 
-	c.TplName = "result.html"
 }
 
 
@@ -56,5 +60,5 @@ type InterestingController struct {
 }
 
 func (c *InterestingController) Get() {
-	c.TplName = "aaa.html"
+	c.TplName = "relax.html"
 }

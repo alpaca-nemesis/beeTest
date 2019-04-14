@@ -1,0 +1,20 @@
+<header id="header">
+    <div class="container main-menu">
+        <div class="row align-items-center justify-content-between d-flex">
+            <div id="logo">
+                <a href="/"><img src="../static/img/logo.png" alt="" title="" /></a>
+            </div>
+            <nav id="nav-menu-container">
+                <ul class="nav-menu">
+                    {{if .isLogin}}
+                        <li><a>你好，{{.username}}</a></li>
+                        <li><a href="/logout" >退出</a></li>
+                    {{else}}
+                        <li><a href="javascript:void(0)" data-toggle="modal" data-target="#login">登录</a></li>
+                        <li><a href="javascript:void(0)" data-toggle="modal" data-target="#register">注册</a></li>
+                    {{end}}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header><!-- #header -->

@@ -891,7 +891,7 @@ td, th {
 /*---------- End Elements Page -------------*/
 .sample-text-area {
   background: #f9f9ff;
-  padding: 100px 0 70px 0;
+  padding: 0px 0 70px 0;
 }
 
 .sample-text {
@@ -2316,7 +2316,6 @@ body.mobile-nav-active #mobile-nav-toggle {
 .section-gap {
   padding: 50px 0;
 }
-
 .alert-msg {
   color: #008000;
 }

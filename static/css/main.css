@@ -876,7 +876,7 @@ td, th {
 }
 
 .section-top-border {
-  padding: 50px 0;
+  padding: 20px 0;
   border-top: 1px dotted #eee;
 }
 
@@ -891,7 +891,7 @@ td, th {
 /*---------- End Elements Page -------------*/
 .sample-text-area {
   background: #f9f9ff;
-  padding: 0px 0 70px 0;
+  padding: 0px 0 15px 0;
 }
 
 .sample-text {
@@ -2475,13 +2475,16 @@ body.mobile-nav-active #mobile-nav-toggle {
   margin-bottom: 10px;
 }
 
+.header-area {
+  background: #f9f9ff;
+}
 /*-------- Start Banner Area ------------*/
 .banner-area {
   background: #f9f9ff;
 }
 
 .banner-area .fullscreen {
-  height: 500px !important;
+  height: 600px !important;
 }
 
 .banner-left h6 {

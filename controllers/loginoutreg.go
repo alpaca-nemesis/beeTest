@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"beeTest/models"
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
@@ -14,7 +15,8 @@ type LoginController struct {
 func (c *LoginController) Post() {
 	username := c.GetString("username")
 	password := c.GetString("password")
-
+	content := c.GetString("content")
+	fmt.Println(content)
 	o := orm.NewOrm()
 
 	user := models.User{}
@@ -26,10 +28,16 @@ func (c *LoginController) Post() {
 	} else if user.Password != password {
 		c.Ctx.WriteString("密码不对")
 	} else {
-		c.Ctx.SetCookie("username", "username", 3600*24*30)
+		c.Ctx.SetCookie("username", username, 3600*24*30)
 		c.SetSession("username", username)
 		c.SetSession("islogin", "1")
-		c.Redirect("/index", 302)
+		c.Ctx.SetCookie("sessionID", c.Ctx.GetCookie("sessionID"), 3600*24*30)
+		if content == "" {
+			c.Redirect("/index", 302)
+		}else{
+			url := "/search?content=" + content
+			c.Redirect(url, 302)
+		}
 	}
 
 }

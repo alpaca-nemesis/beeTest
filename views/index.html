@@ -23,6 +23,24 @@
 			<link rel="stylesheet" href="../static/css/animate.min.css">
 			<link rel="stylesheet" href="../static/css/owl.carousel.css">
 			<link rel="stylesheet" href="../static/css/main.css">
+
+		<script type="text/javascript">
+			function loginJudger()
+			{
+				var islogin = document.getElementById("islogin")
+				var content = document.getElementById("content").value
+				if(islogin.innerText == "退出") {
+					if(content == ""){
+					}else{
+						window.location.href = "/search?content=" + content
+					}
+				}else{
+					document.getElementById("loginContent").value = content
+					islogin.click()
+				}
+			}
+		</script>
+
 		</head>
 		<body>
 
@@ -48,24 +66,22 @@
 {{/*			</section>*/}}
 {{/*			<!-- End banner Area -->*/}}
 
-		  <section class="banner-area">
-			  <div class="container">
-				  <div class="row fullscreen align-items-center">
-					  <div class="col-md-8 col-md-offset-2">
-						  <form  action="/search" method="get">
-							  <div class="input-group">
-								  <input type="text" class="form-control" name="content" placeholder="请输入搜索内容" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter the content '" required="" type="text">
-								  <div class="input-group-btn">
-									  <button class="btn btn-primary btn-fatter" type="submit" style="font-size: 1.3rem;">
-										  <span class="lnr lnr-arrow-right"></span>
-									  </button>
-								  </div>
-							  </div>
-						  </form>
-					  </div>
-				  </div>
-			  </div>
-		  </section>
+			<section class="banner-area">
+				<div class="container">
+					<div class="row fullscreen align-items-center">
+						<div class="col-md-8 col-md-offset-2">
+								<div class="input-group">
+									<input id="content" class="form-control" name="content" placeholder="请输入搜索内容" onfocus="this.placeholder = ''" onblur="this.placeholder = '请输入搜索内容'" required="" type="text">
+									<div class="input-group-btn">
+										<button  onclick="loginJudger()" class="btn btn-primary btn-fatter" style="font-size: 1.3rem;">
+											<span class="lnr lnr-arrow-right"></span>
+										</button>
+									</div>
+								</div>
+						</div>
+					</div>
+				</div>
+			</section>
 
 
 

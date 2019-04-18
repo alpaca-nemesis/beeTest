@@ -58,6 +58,7 @@ func (c *SearchController) Get() {
 		if err != nil {
 			log.Fatalln("content nil: ", err)
 		}
+		c.Data["searchContent"] = content
 		c.Data["content"] = search(content, c.rpcClient)
 		c.TplName = "result.html"
 	}

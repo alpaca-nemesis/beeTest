@@ -2484,7 +2484,32 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .banner-area .fullscreen {
-  height: 600px !important;
+  height: 400px !important;
+}
+
+.bottom-padding {
+  position:absolute;width:100%;bottom:224px;
+}
+
+.top-padding{
+  position: absolute; width:100%; top:70px;
+}
+
+.form2-control {
+  width: 500px;
+  padding: 0.375rem 0.75rem;
+  font-size: 1.3rem;
+  line-height: 2;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 2px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.footer{
+  position:absolute;bottom:0;width:100%;
 }
 
 .banner-left h6 {

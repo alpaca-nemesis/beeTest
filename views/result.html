@@ -28,10 +28,42 @@
 			<link rel="stylesheet" href="../static/css/animate.min.css">
 			<link rel="stylesheet" href="../static/css/owl.carousel.css">
 			<link rel="stylesheet" href="../static/css/main.css">
+		<script>
+			window.onload=function(){
+				document.getElementById("content").value = {{.searchContent}}
+			}
+		</script>
 		</head>
+	<header id="header">
+		<div class="container main-menu ">
+			<div class="row align-items-center justify-content-between d-flex">
+
+				<div>
+					<form href="/search" method="GET">
+						<input id="content" class="form2-control" style="font-size: 0.8rem;padding: 0.375rem 0.75rem 0.375rem 0.75rem;" name="content" placeholder="请输入搜索内容" onfocus="this.placeholder = ''" onblur="this.placeholder = '请输入搜索内容'" required="" type="text">
+
+						<button type="submit" class="btn btn-primary" style="font-size: 0.8rem;">
+							<span class="lnr lnr-arrow-right"></span>
+						</button>
+					</form>
+				</div>
+
+				<nav id="nav-menu-container">
+					<ul class="nav-menu">
+						{{if .isLogin}}
+							<li><a>你好，{{.username}}</a></li>
+							<li><a id="islogin" href="/logout" >退出</a></li>
+						{{else}}
+							<li><a id="islogin" href="javascript:void(0)" data-toggle="modal" data-target="#login">登录</a></li>
+							<li><a href="javascript:void(0)" data-toggle="modal" data-target="#register">注册</a></li>
+						{{end}}
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</header><!-- #header -->
 		<body>
 
-			{{template "header.html" .}}
 
 			<!-- start banner Area -->
 			<section class="relative about-banner" id="home">	
@@ -63,7 +95,7 @@
 						</div>
 					</div>
 				</div>
-				<hr width="80%" color='#987cb9' size=3>
+				<hr width="60%" color='#987cb9' size=3>
 				<!-- Start Sample Area -->
 				<section class="sample-text-area">
 					<div class="container">
@@ -75,7 +107,7 @@
 					</div>
 				</section>
 				<!-- End Sample Area -->
-				<hr width="80%" color='#987cb9' size=3>
+				<hr width="60%" color='#987cb9' size=3>
 				<!-- Start Sample Area -->
 				<section class="sample-text-area ">
 					<div class="container">

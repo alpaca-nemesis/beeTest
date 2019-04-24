@@ -3,10 +3,8 @@ package controllers
 import (
 	_ "beeTest/models"
 	"github.com/astaxie/beego"
-	"github.com/go-ego/riot/types"
 	"log"
 	"net/rpc"
-	"net/rpc/jsonrpc"
 )
 
 /*************  INDEX  ******************/
@@ -45,7 +43,7 @@ type SearchController struct {
 func (c *SearchController) Get() {
 	islogin := c.GetSession("islogin")
 	if c.rpcClient == nil{
-		c.rpcInit()
+		c.rpcClient = rpcInit()
 	}
 	if islogin == nil {
 		c.Data["isLogin"] = 0
@@ -64,25 +62,8 @@ func (c *SearchController) Get() {
 	}
 }
 
-func (c *SearchController) rpcInit() {
-	var err error
-	c.rpcClient, err = jsonrpc.Dial("tcp", "127.0.0.1:8096")
-	if err != nil {
-		log.Fatalln("dailing error: ", err)
-	}
-}
 
-func search(content string, rpcClient *rpc.Client) types.SearchResp {
-	req := SearchRequest{content}
-	var res SearchResponse
-	err := rpcClient.Call("RPCEngine.Search", req, &res)
-	if err != nil {
-		log.Fatalln("search error: ", err)
-	}
-	return res.Content
-}
-
-/*************  SEARCH  ******************/
+/*************  Interesting  ******************/
 type InterestingController struct {
 	beego.Controller
 }
@@ -90,3 +71,46 @@ type InterestingController struct {
 func (c *InterestingController) Get() {
 	c.TplName = "relax.html"
 }
+
+/*************  AddContent  ******************/
+type AddContentController struct {
+	rpcClient *rpc.Client
+	beego.Controller
+}
+
+
+func (c *AddContentController) Get() {
+	islogin := c.GetSession("islogin")
+	if islogin == nil {
+		c.Data["isLogin"] = 0
+		c.Redirect("/index", 302)
+	} else {
+		c.Data["isLogin"] = 1
+		c.Data["username"] = c.GetSession("username")
+		c.TplName = "add.html"
+	}
+}
+
+
+func (c *AddContentController) Post() {
+	islogin := c.GetSession("islogin")
+	if c.rpcClient == nil{
+		c.rpcClient = rpcInit()
+	}
+	if islogin == nil {
+		c.Data["isLogin"] = 0
+		c.Redirect("/index", 302)
+	} else {
+		var content string
+		c.Data["isLogin"] = 1
+		c.Data["username"] = c.GetSession("username")
+		err := c.Ctx.Input.Bind(&content, "content")
+		if err != nil {
+			log.Fatalln("content nil: ", err)
+		}
+		hehe := addContent(content, c.rpcClient)
+		c.Ctx.WriteString(hehe)
+	}
+}
+
+

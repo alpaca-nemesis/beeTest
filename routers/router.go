@@ -13,4 +13,5 @@ func init() {
 	beego.Router("/logout", &controllers.LogoutController{})
 	beego.Router("/regist", &controllers.RegistController{})
 	beego.Router("/relax", &controllers.InterestingController{})
+	beego.Router("/add", &controllers.AddContentController{})
 }

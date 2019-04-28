@@ -15,6 +15,5 @@ func init() {
 	beego.Router("/relax", &controllers.InterestingController{})
 	beego.Router("/add", &controllers.AddContentController{})
 	beego.Router("/cxk", &controllers.CXKController{})
-	beego.Router("/FileOpt", &controllers.FileOptUploadController{})
-	beego.Router("/FileDown", &controllers.FileOptDownloadController{})
+	beego.Router("/upload", &controllers.FileUploadController{})
 }

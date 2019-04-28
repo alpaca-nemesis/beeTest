@@ -114,3 +114,13 @@ func (c *AddContentController) Post() {
 }
 
 
+/*************  CXKBALL  ******************/
+type CXKController struct {
+	rpcClient *rpc.Client
+	beego.Controller
+}
+
+func (c *CXKController) Get() {
+	c.TplName = "cxk.html"
+}
+

@@ -61,8 +61,9 @@ func (c *SearchController) Get() {
 		if err != nil {
 			log.Fatalln("content nil: ", err)
 		}
-
-
+		var result string
+		result = c.searchContent(content)
+		c.Data["result"] = result
 
 		c.Data["searchContent"] = content
 		c.TplName = "result.html"

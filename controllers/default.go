@@ -3,8 +3,8 @@ package controllers
 import (
 	_ "beeTest/models"
 	"github.com/astaxie/beego"
+	"github.com/olivere/elastic"
 	"log"
-	"net/rpc"
 )
 
 /*************  INDEX  ******************/
@@ -36,19 +36,24 @@ func (c *IndexController) Get() {
 
 /*************  SEARCH  ******************/
 type SearchController struct {
-	rpcClient *rpc.Client
+	client *elastic.Client
 	beego.Controller
 }
 
+
+
 func (c *SearchController) Get() {
 	islogin := c.GetSession("islogin")
-	if c.rpcClient == nil{
-		c.rpcClient = rpcInit()
-	}
 	if islogin == nil {
 		c.Data["isLogin"] = 0
 		c.Redirect("/index", 302)
 	} else {
+		if c.client == nil {
+			err := c.clientInit()
+			if err != nil {
+				log.Fatalln("client err: ", err)
+			}
+		}
 		var content string
 		c.Data["isLogin"] = 1
 		c.Data["username"] = c.GetSession("username")
@@ -56,28 +61,20 @@ func (c *SearchController) Get() {
 		if err != nil {
 			log.Fatalln("content nil: ", err)
 		}
+
+
+
 		c.Data["searchContent"] = content
-		c.Data["content"] = search(content, c.rpcClient)
 		c.TplName = "result.html"
 	}
 }
 
 
-/*************  Interesting  ******************/
-type InterestingController struct {
-	beego.Controller
-}
-
-func (c *InterestingController) Get() {
-	c.TplName = "relax.html"
-}
-
 /*************  AddContent  ******************/
 type AddContentController struct {
-	rpcClient *rpc.Client
+	client *elastic.Client
 	beego.Controller
 }
-
 
 func (c *AddContentController) Get() {
 	islogin := c.GetSession("islogin")
@@ -91,32 +88,31 @@ func (c *AddContentController) Get() {
 	}
 }
 
-
 func (c *AddContentController) Post() {
 	islogin := c.GetSession("islogin")
-	if c.rpcClient == nil{
-		c.rpcClient = rpcInit()
-	}
 	if islogin == nil {
 		c.Data["isLogin"] = 0
 		c.Redirect("/index", 302)
 	} else {
-		var content string
 		c.Data["isLogin"] = 1
 		c.Data["username"] = c.GetSession("username")
-		err := c.Ctx.Input.Bind(&content, "content")
-		if err != nil {
-			log.Fatalln("content nil: ", err)
-		}
-		hehe := addContent(content, c.rpcClient)
-		c.Ctx.WriteString(hehe)
+		c.TplName = "add.html"
 	}
+}
+
+
+/*************  Interesting  ******************/
+type InterestingController struct {
+	beego.Controller
+}
+
+func (c *InterestingController) Get() {
+	c.TplName = "relax.html"
 }
 
 
 /*************  CXKBALL  ******************/
 type CXKController struct {
-	rpcClient *rpc.Client
 	beego.Controller
 }
 

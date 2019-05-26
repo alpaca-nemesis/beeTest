@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/olivere/elastic"
+	"reflect"
 )
 
 type Tweet struct {
@@ -27,23 +28,24 @@ func (c *SearchController) searchContent(str string) string{
 	termQuery := elastic.NewTermQuery("user", str)
 	//searchResult, err := c.client.Search().
 
-	_, err := c.client.Search().
-		Index("tweets").            // search in index "tweets"
+	searchResult, err := c.client.Search().
+		Index("twitter").            // search in index "tweets"
 		Query(termQuery).           // specify the query
-		Sort("user.keyword", true). // sort by "user" field, ascending
+		//Sort("user.keyword", true). // sort by "user" field, ascending
 		From(0).Size(10).           // take documents 0-9
 		Pretty(true).               // pretty print request and response JSON
 		Do(context.Background())    // execute
+
 	if err != nil {
 		fmt.Println("error:", err)
 	}
-	//var ttyp Tweet
-	//for _, item := range searchResult.Each(reflect.TypeOf(ttyp)) {
-	//	if t, ok := item.(Tweet); ok {
-	//		fmt.Printf("Tweet by %s: %s\n", t.User, t.Message)
-	//		return t.Message
-	//	}
-	//}
+	var ttyp Tweet
+	for _, item := range searchResult.Each(reflect.TypeOf(ttyp)) {
+		if t, ok := item.(Tweet); ok {
+			fmt.Printf("Tweet by %s: %s\n", t.User, t.Message)
+			return t.Message
+		}
+	}
 	hehe := "caonima"
 	return hehe
 }

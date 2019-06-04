@@ -5,17 +5,19 @@ import (
 	"fmt"
 	"github.com/olivere/elastic"
 	"reflect"
+	"strconv"
 )
 
 type Tweet struct {
 	User    string `json:"user"`
 	Message string `json:"message"`
 }
+var ctx = context.Background()
 
 func (c *SearchController) clientInit() error{
 
 	// Create a client
-	var client, err = elastic.NewClient(elastic.SetURL("http://192.168.38.129:9200"))
+	var client, err = elastic.NewClient(elastic.SetURL("http://192.168.38.132:9200"))
 	if err != nil {
 		fmt.Println("error:", err)
 	}
@@ -34,7 +36,7 @@ func (c *SearchController) searchContent(str string) string{
 		//Sort("user.keyword", true). // sort by "user" field, ascending
 		From(0).Size(10).           // take documents 0-9
 		Pretty(true).               // pretty print request and response JSON
-		Do(context.Background())    // execute
+		Do(ctx)    // execute
 
 	if err != nil {
 		fmt.Println("error:", err)
@@ -50,15 +52,25 @@ func (c *SearchController) searchContent(str string) string{
 	return hehe
 }
 
-func (c *AddContentController) addIndex(str string) error{
-	tweet := Tweet{User: "olivere", Message: "Take Five"}
-	_, err := c.client.Index().
-		Index("tweets").
-		Type("doc").
-		Id("1").
-		BodyJson(tweet).
-		Refresh("wait_for").
-		Do(context.Background())
-	return err
+func (c *AddContentController) addIndex(body interface{}, index string, id int) error{
+	//str := `{"user" : "olive777re", "message" : "It777's a Raggy Waltz","sex":2,"hobby":"swimming, dota"}`
+	temp := c.client.Index().
+		Index(index)
+	if id != 0{
+		temp = temp.Id(strconv.Itoa(id))
+	}
+	put2, err := temp.
+		BodyJson(body).
+		Do(ctx)
+	if err != nil {
+		// Handle error
+		fmt.Println(err)
+	}
+	fmt.Printf("Indexed document %s to index %s, type %s\n", put2.Id, put2.Index, put2.Type)
+
+	_, err = c.client.Flush().Index(index).Do(ctx)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 

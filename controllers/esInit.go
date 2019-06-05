@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/olivere/elastic"
 	"reflect"
-	"strconv"
 )
 
 type Tweet struct {
@@ -34,7 +33,7 @@ func (c *SearchController) searchContent(str string) string{
 		Index("twitter").            // search in index "tweets"
 		Query(termQuery).           // specify the query
 		//Sort("user.keyword", true). // sort by "user" field, ascending
-		From(0).Size(10).           // take documents 0-9
+		//From(0).Size(10).           // take documents 0-9
 		Pretty(true).               // pretty print request and response JSON
 		Do(ctx)    // execute
 
@@ -52,12 +51,11 @@ func (c *SearchController) searchContent(str string) string{
 	return hehe
 }
 
-func (c *AddContentController) addIndex(body interface{}, index string, id int) error{
-	//str := `{"user" : "olive777re", "message" : "It777's a Raggy Waltz","sex":2,"hobby":"swimming, dota"}`
+func (c *AddContentController) addIndex(body interface{}, index string, id string) error{
 	temp := c.client.Index().
 		Index(index)
-	if id != 0{
-		temp = temp.Id(strconv.Itoa(id))
+	if id != ""{
+		temp = temp.Id(id)
 	}
 	put2, err := temp.
 		BodyJson(body).
@@ -65,12 +63,30 @@ func (c *AddContentController) addIndex(body interface{}, index string, id int) 
 	if err != nil {
 		// Handle error
 		fmt.Println(err)
+		return err
 	}
 	fmt.Printf("Indexed document %s to index %s, type %s\n", put2.Id, put2.Index, put2.Type)
 
+	//flush the index
 	_, err = c.client.Flush().Index(index).Do(ctx)
 	if err != nil {
 		fmt.Println(err)
+		return err
 	}
+
+	return nil
+}
+
+func (c *AddContentController) deleteIndex(index string, id string) error{
+
+	res, err := c.client.Delete().Index(index).
+		Id(id).
+		Do(context.Background())
+	if err != nil {
+		println(err.Error())
+		return err
+	}
+	fmt.Printf("delete result %s\n", res.Result)
+	return nil
 }
 

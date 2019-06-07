@@ -83,6 +83,14 @@ func (c *AddContentController) Get() {
 		c.Data["isLogin"] = 0
 		c.Redirect("/index", 302)
 	} else {
+		if c.client == nil {
+			err := c.clientInit()
+			if err != nil {
+				log.Fatalln("client err: ", err)
+			}
+		}
+		indicies := getIndexName(c.catIndices())
+		c.Data["indicies"] = indicies
 		c.Data["isLogin"] = 1
 		c.Data["username"] = c.GetSession("username")
 		c.TplName = "add.html"
@@ -121,3 +129,13 @@ func (c *CXKController) Get() {
 	c.TplName = "cxk.html"
 }
 
+/*************  XIALA  ******************/
+type XIALAController struct {
+	beego.Controller
+}
+
+func (c *XIALAController) Get() {
+	hehe := []string{"a", "b", "c"}
+	c.Data["hehe"] = hehe
+	c.TplName = "xiala.html"
+}

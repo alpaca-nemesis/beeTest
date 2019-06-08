@@ -32,6 +32,25 @@
 <body>
 
 {{template "header.html" .}}
+<script type="text/javascript">
+    function insert1() {
+        var li13 = document.getElementById("li13");
+        //创建li
+        var li15 = document.createElement("li");
+        //创建文本
+        var text15 =document.createElement('input');
+        text15.setAttribute('type', 'text');//输入框的类型
+        text15.setAttribute('name', "answers");//输入框的名字
+        text15.setAttribute('id', "b");//输入框的id
+        //把文本添加到li下面 appendChild
+        li15.appendChild(text15);
+        //获取到ul
+        var ul21 = document.getElementById("ulid21");
+
+        //insertBefore(newNode,oldNode)
+        ul21.insertBefore(li15,li13);
+    }
+</script>
 
 <section class="banner-area">
     <div class="container">
@@ -52,6 +71,12 @@
                                 </select>
                             </div>
                     </div>
+                    <ul id="ulid21" >
+                        <li id="li11" >问卷选项设置:</li>
+                    </ul>
+                    <tr>
+                        <input type="button" value="增加答案选项" onclick="insert1()" />
+                    </tr>
 
                     <div class="modal-footer">
                         <button class="btn btn-primary" type="submit">保存</button>

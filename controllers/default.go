@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/olivere/elastic"
 	"log"
+	"strconv"
 )
 
 /*************  INDEX  ******************/
@@ -51,6 +52,8 @@ func (c *SearchController) Get() {
 		if c.client == nil {
 			err := c.clientInit()
 			if err != nil {
+				c.Data["message"] = err
+				c.TplName = "message.html"
 				log.Fatalln("client err: ", err)
 			}
 		}
@@ -59,7 +62,9 @@ func (c *SearchController) Get() {
 		c.Data["username"] = c.GetSession("username")
 		err := c.Ctx.Input.Bind(&content, "content")
 		if err != nil {
-			log.Fatalln("content nil: ", err)
+			c.Data["message"] = err
+			c.TplName = "message.html"
+			log.Fatalln("client err: ", err)
 		}
 		var result string
 		result = c.searchContent(content)
@@ -86,6 +91,8 @@ func (c *AddContentController) Get() {
 		if c.client == nil {
 			err := c.clientInit()
 			if err != nil {
+				c.Data["message"] = err
+				c.TplName = "message.html"
 				log.Fatalln("client err: ", err)
 			}
 		}
@@ -103,9 +110,37 @@ func (c *AddContentController) Post() {
 		c.Data["isLogin"] = 0
 		c.Redirect("/index", 302)
 	} else {
+		if c.client == nil {
+			err := c.clientInit()
+			if err != nil {
+				c.Data["message"] = err
+				c.TplName = "message.html"
+				log.Fatalln("client err: ", err)
+			}
+		}
 		c.Data["isLogin"] = 1
 		c.Data["username"] = c.GetSession("username")
-		c.TplName = "add.html"
+
+		ins := map[string]interface{}{}
+		fieldNum, err := strconv.Atoi(c.GetString("fieldNum"))
+		if err != nil{
+			c.Data["message"] = err
+			c.TplName = "message.html"
+			log.Fatalln("client err: ", err)
+		}
+		index := c.GetString("index")
+		for i:=0; i<fieldNum; i++{
+			suffix := strconv.Itoa(i)
+			ins[c.GetString("field"+suffix)] = c.GetString("content" + suffix)
+		}
+		err = c.addIndex(ins, index, "")
+		if err!=nil{
+			c.Data["message"] = err
+			c.TplName = "message.html"
+			log.Fatalln("client err: ", err)
+		}
+		c.Data["message"] = "success"
+		c.TplName = "message.html"
 	}
 }
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/olivere/elastic"
+	"log"
 	"reflect"
 	"strings"
 )
@@ -62,7 +63,7 @@ func (c *AddContentController) clientInit() error{
 	// Create a client
 	var client, err = elastic.NewClient(elastic.SetURL("http://192.168.8.5:9200"))
 	if err != nil {
-		fmt.Println("error:", err)
+		log.Fatalln("client err: ", err)
 	}
 	c.client = client
 	return err
@@ -80,7 +81,7 @@ func (c *AddContentController) addIndex(body interface{}, index string, id strin
 		Do(ctx)
 	if err != nil {
 		// Handle error
-		fmt.Println(err)
+		log.Fatalln("client err: ", err)
 		return err
 	}
 	fmt.Printf("Indexed document %s to index %s, type %s\n", put2.Id, put2.Index, put2.Type)
@@ -88,7 +89,7 @@ func (c *AddContentController) addIndex(body interface{}, index string, id strin
 	//flush the index
 	_, err = c.client.Flush().Index(index).Do(ctx)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatalln("client err: ", err)
 		return err
 	}
 
@@ -101,7 +102,7 @@ func (c *AddContentController) deleteIndex(index string, id string) error{
 		Id(id).
 		Do(context.Background())
 	if err != nil {
-		println(err.Error())
+		log.Fatalln("client err: ", err)
 		return err
 	}
 	fmt.Printf("delete result %s\n", res.Result)
@@ -111,7 +112,7 @@ func (c *AddContentController) deleteIndex(index string, id string) error{
 func (c *AddContentController) catIndices() elastic.CatIndicesResponse{
 	indices, err := c.client.CatIndices().Do(ctx)
 	if err != nil{
-		fmt.Println(err)
+		log.Fatalln("client err: ", err)
 	}
 	return indices
 }

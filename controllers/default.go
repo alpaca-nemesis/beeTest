@@ -93,7 +93,8 @@ func (c *AddContentController) Get() {
 			if err != nil {
 				c.Data["message"] = err
 				c.TplName = "message.html"
-				log.Fatalln("client err: ", err)
+				log.Println("client err: ", err)
+				return
 			}
 		}
 		indicies := getIndexName(c.catIndices())
@@ -115,7 +116,7 @@ func (c *AddContentController) Post() {
 			if err != nil {
 				c.Data["message"] = err
 				c.TplName = "message.html"
-				log.Fatalln("client err: ", err)
+				log.Println("client err: ", err)
 			}
 		}
 		c.Data["isLogin"] = 1
@@ -126,7 +127,7 @@ func (c *AddContentController) Post() {
 		if err != nil{
 			c.Data["message"] = err
 			c.TplName = "message.html"
-			log.Fatalln("client err: ", err)
+			log.Println("client err: ", err)
 		}
 		index := c.GetString("index")
 		for i:=0; i<fieldNum; i++{
@@ -137,7 +138,7 @@ func (c *AddContentController) Post() {
 		if err!=nil{
 			c.Data["message"] = err
 			c.TplName = "message.html"
-			log.Fatalln("client err: ", err)
+			log.Println("client err: ", err)
 		}
 		c.Data["message"] = "success"
 		c.TplName = "message.html"

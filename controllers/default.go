@@ -50,7 +50,7 @@ func (c *SearchController) Get() {
 		c.Redirect("/index", 302)
 	} else {
 		if c.client == nil {
-			err := c.clientInit()
+			err := c.clientInit(esHost)
 			if err != nil {
 				c.Data["message"] = err
 				c.TplName = "message.html"
@@ -112,7 +112,7 @@ func (c *AddContentController) Post() {
 		c.Redirect("/index", 302)
 	} else {
 		if c.client == nil {
-			err := c.clientInit()
+			err := c.clientInit(esHost)
 			if err != nil {
 				c.Data["message"] = err
 				c.TplName = "message.html"

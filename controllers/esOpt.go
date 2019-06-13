@@ -14,11 +14,12 @@ type Tweet struct {
 	Message string `json:"message"`
 }
 var ctx = context.Background()
+var esHost = "http://192.168.8.5:9200"
 
-func (c *SearchController) clientInit() error{
+func (c *SearchController) clientInit(host string) error{
 
 	// Create a client
-	var client, err = elastic.NewClient(elastic.SetURL("http://192.168.8.5:9200"))
+	var client, err = elastic.NewClient(elastic.SetURL(host))
 	if err != nil {
 		c.client = nil
 	}else{
@@ -59,7 +60,7 @@ func (c *SearchController) searchContent(str string) string{
 
 //------------------------AddController
 
-func (c *AddContentController) clientInit() error{
+func (c *AddContentController) clientInit(host string) error{
 
 	// Create a client
 	var client, err = elastic.NewClient(elastic.SetURL("http://192.168.8.5:9200"))

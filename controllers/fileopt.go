@@ -3,6 +3,7 @@ package controllers
 import (
 	_ "beeTest/models"
 	"github.com/astaxie/beego"
+	"log"
 	"path"
 	"strings"
 )
@@ -12,24 +13,31 @@ type FileUploadController struct {
 	beego.Controller
 }
 
+var filePrefix = beego.AppConfig.String("uploaddir")
+
 func (c *FileUploadController) Get() {
 	c.TplName = "fileupload.html"
 }
 
 func (c *FileUploadController) Post() {
 	file, information, err := c.GetFile("file")
+	defer file.Close()
 	if err != nil {
-		c.Ctx.WriteString("File retrieval failure")
+		c.Data["message"] = err
+		c.TplName = "message.html"
+		log.Println("client err: ", err)
 		return
 	} else {
 		filename := information.Filename
 		picture := strings.Split(filename, ".")
 		layout := strings.ToLower(picture[len(picture)-1])
 		if layout != "jpg" && layout != "png" && layout != "log" {
-			c.Ctx.WriteString("请上传符合格式的图片（png、jpg、gif）")
+			c.Data["message"] = "请上传符合格式的图片（png、jpg、gif）"
+			c.TplName = "message.html"
+			log.Println("client err: ", err)
 			return
 		}
-		savePath := path.Join("/home/crowix/go/src/beeTest/static/upload", filename)
+		savePath := path.Join(filePrefix, filename)
 		//fmt.Println(savePath)
 		err = c.SaveToFile("file", savePath)
 		if err != nil {
@@ -38,7 +46,6 @@ func (c *FileUploadController) Post() {
 			c.Ctx.WriteString("File upload succeed!")
 		}
 	}
-	defer file.Close()
 	c.TplName = "upload.html"
 
 }

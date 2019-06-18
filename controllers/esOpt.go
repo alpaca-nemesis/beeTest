@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"github.com/astaxie/beego"
 	"github.com/olivere/elastic"
 	"log"
 	"reflect"
@@ -14,12 +15,12 @@ type Tweet struct {
 	Message string `json:"message"`
 }
 var ctx = context.Background()
-var esHost = "http://192.168.8.5:9200"
+var esHost = beego.AppConfig.String("eshost")
 
-func (c *SearchController) clientInit(host string) error{
+func (c *SearchController) clientInit() error{
 
 	// Create a client
-	var client, err = elastic.NewClient(elastic.SetURL(host))
+	var client, err = elastic.NewClient(elastic.SetURL(esHost))
 	if err != nil {
 		c.client = nil
 	}else{
@@ -60,10 +61,10 @@ func (c *SearchController) searchContent(str string) string{
 
 //------------------------AddController
 
-func (c *AddContentController) clientInit(host string) error{
+func (c *AddContentController) clientInit() error{
 
 	// Create a client
-	var client, err = elastic.NewClient(elastic.SetURL("http://192.168.8.5:9200"))
+	var client, err = elastic.NewClient(elastic.SetURL(esHost))
 	if err != nil {
 		c.client = nil
 		return err
@@ -74,27 +75,27 @@ func (c *AddContentController) clientInit(host string) error{
 }
 
 
-func (c *AddContentController) addIndex(body interface{}, index string, id string) error{
+func (c *AddContentController) addIndex(body interface{}, index string, id string) (string, error){
 	temp := c.client.Index().
 		Index(index)
 	if id != ""{
 		temp = temp.Id(id)
 	}
-	put2, err := temp.
+	res, err := temp.
 		BodyJson(body).
 		Do(ctx)
 	if err != nil {
-		return err
+		return "", err
 	}
-	fmt.Printf("Indexed document %s to index %s, type %s\n", put2.Id, put2.Index, put2.Type)
+	fmt.Printf("Indexed document %s to index %s, type %s\n", res.Id, res.Index, res.Type)
 
 	//flush the index
 	_, err = c.client.Flush().Index(index).Do(ctx)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return res.Id, nil
 }
 
 func (c *AddContentController) deleteIndex(index string, id string) error{

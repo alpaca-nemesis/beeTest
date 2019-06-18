@@ -50,11 +50,12 @@ func (c *SearchController) Get() {
 		c.Redirect("/index", 302)
 	} else {
 		if c.client == nil {
-			err := c.clientInit(esHost)
+			err := c.clientInit()
 			if err != nil {
 				c.Data["message"] = err
 				c.TplName = "message.html"
 				log.Fatalln("client err: ", err)
+				return
 			}
 		}
 		var content string
@@ -65,6 +66,7 @@ func (c *SearchController) Get() {
 			c.Data["message"] = err
 			c.TplName = "message.html"
 			log.Fatalln("client err: ", err)
+			return
 		}
 		var result string
 		result = c.searchContent(content)
@@ -112,11 +114,12 @@ func (c *AddContentController) Post() {
 		c.Redirect("/index", 302)
 	} else {
 		if c.client == nil {
-			err := c.clientInit(esHost)
+			err := c.clientInit()
 			if err != nil {
 				c.Data["message"] = err
 				c.TplName = "message.html"
 				log.Println("client err: ", err)
+				return
 			}
 		}
 		c.Data["isLogin"] = 1
@@ -128,18 +131,21 @@ func (c *AddContentController) Post() {
 			c.Data["message"] = err
 			c.TplName = "message.html"
 			log.Println("client err: ", err)
+			return
 		}
 		index := c.GetString("index")
 		for i:=0; i<fieldNum; i++{
 			suffix := strconv.Itoa(i)
 			ins[c.GetString("field"+suffix)] = c.GetString("content" + suffix)
 		}
-		err = c.addIndex(ins, index, "")
+		id, err := c.addIndex(ins, index, "")
 		if err!=nil{
 			c.Data["message"] = err
 			c.TplName = "message.html"
 			log.Println("client err: ", err)
+			return
 		}
+		c.Data["id"] = id
 		c.Data["message"] = "success"
 		c.TplName = "message.html"
 	}

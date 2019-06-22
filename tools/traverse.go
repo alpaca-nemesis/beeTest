@@ -4,24 +4,52 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"strings"
 )
 
-var formats []string = []string{"docx", "pdf", "xlsx", "txt", "rtf"}
+type reader interface {
+	getFile(string) error
+	readAll() error
+}
 
+var formats []string = []string{"docx", "pdf", "xlsx", "txt", "rtf"}
 var uploadDir = beego.AppConfig.String("uploaddir")
 
 func traverse() {
+	fileSuffix := ""
+	eR := excelReader{}
+	dR := docReader{}
 	files, err := GetAllFiles(uploadDir, formats)
 	if err != nil {
 		fmt.Println(err)
 	}
-	var fileSuffix string
+
 	for _, file := range files{
 		fileSuffix = path.Ext(file)
+		if fileSuffix == ".xlsx"{
+			err = handler(&eR, file)
+		}else{
+			err = handler(&dR, file)
+		}
+		if err != nil{
+			log.Println(err)
+		}
 		fmt.Println(fileSuffix)
+	}
+}
+
+func handler(r reader, file string)error{
+	err := r.getFile(file)
+	if err != nil{
+		return err
+	}else{
+		err = r.readAll()
+		if err != nil{
+			return err
+		}
 	}
 }
 
@@ -33,7 +61,6 @@ func GetAllFiles(dirPth string, formats []string) (files []string, err error) {
 		return nil, err
 	}
 	PthSep := string(os.PathSeparator)
-	//suffix = strings.ToUpper(suffix) //忽略后缀匹配的大小写
 	for _, fi := range dir {
 		if fi.IsDir() {
 			// 目录, 递归遍历
@@ -42,7 +69,8 @@ func GetAllFiles(dirPth string, formats []string) (files []string, err error) {
 			// 过滤指定格式
 			ok := false
 			for _, format := range formats{
-				ok = ok || strings.HasSuffix(fi.Name(), format)
+				//忽略大小写
+				ok = ok || strings.HasSuffix(strings.ToLower(fi.Name()), format)
 				if ok {
 					break
 				}

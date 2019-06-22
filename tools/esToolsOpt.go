@@ -2,6 +2,7 @@ package tools
 
 import (
 	"fmt"
+	"github.com/astaxie/beego"
 	"github.com/olivere/elastic"
 )
 
@@ -11,11 +12,12 @@ type esClient struct {
 	flushCount int
 }
 
+var esHost = beego.AppConfig.String("eshost")
 
-func (c *esClient) clientInit(host string) error {
+func (c *esClient) clientInit() error {
 
 	// Create a client
-	var client, err = elastic.NewClient(elastic.SetURL(host))
+	var client, err = elastic.NewClient(elastic.SetURL(esHost))
 	if err != nil {
 		fmt.Println("error:", err)
 	}

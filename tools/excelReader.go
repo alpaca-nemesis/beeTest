@@ -3,20 +3,17 @@ package tools
 import (
 	"context"
 	"fmt"
-	"github.com/astaxie/beego"
-	"github.com/olivere/elastic"
 	"github.com/tealeg/xlsx"
 )
 
 var ctx = context.Background()
-var esHost = beego.AppConfig.String("eshost")
 
 type excelReader struct{
 	xlFile *xlsx.File
 	filename string
 	columnNum int
 	headers map[string][]string
-	esC *elastic.Client
+	esC *esClient
 }
 
 func (eR *excelReader)getFile(fileName string) error{
@@ -49,13 +46,8 @@ func (eR *excelReader)setHeaders() error{
 }
 
 func (eR *excelReader)readAll() error{
-	esC := esClient{}
-	err := esC.clientInit(esHost)
+	var err error
 	ins := map[string]interface{}{}
-	ins["agg"] = "fuck"
-	if err != nil{
-		return err
-	}
 
 	for _, sheet := range eR.xlFile.Sheets{
 		sheetName := sheet.Name
@@ -69,7 +61,7 @@ func (eR *excelReader)readAll() error{
 					ins[eR.headers[sheetName][i]] = cell.String()
 					fmt.Println(eR.headers[sheetName][i],cell.String())
 				}
-				err = esC.create(ins, sheetName, "")
+				err = eR.esC.create(ins, sheetName, "")
 				if err != nil{
 					return err
 				}

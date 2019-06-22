@@ -2,25 +2,32 @@ package tools
 
 import (
 	"code.sajari.com/docconv"
-	"fmt"
-	"github.com/olivere/elastic"
-	"github.com/tealeg/xlsx"
 )
 
 type docReader struct{
-	xlFile *xlsx.File
+	docFile *docconv.Response
 	filename string
-	columnNum int
-	headers map[string][]string
-	esC *elastic.Client
+	docType string
+	esC *esClient
 }
 
 
-func (dR *docReader)toTxt(file string) (content string, res map[string]string, err error){
-	res = make(map[string]string)
-	fileRes, err := docconv.ConvertPath(file)
-	if err != nil {
-		fmt.Println(err)
+func (dR *docReader) getFile(filename string) error{
+	var err error
+	dR.filename = filename
+	dR.docFile, err = docconv.ConvertPath(filename)
+	return err
+	//return fileRes.Body, fileRes.Meta, err
+}
+
+func (dR *docReader) readAll() error{
+	var err error
+	ins := map[string]interface{}{}
+	ins["content"] = dR.docFile.Body
+	ins["filePath"] = dR.filename
+	for key, value := range dR.docFile.Meta{
+		ins[key] = value
 	}
-	return fileRes.Body, fileRes.Meta, err
+	err = dR.esC.create(ins, dR.docType, "")
+	return err
 }

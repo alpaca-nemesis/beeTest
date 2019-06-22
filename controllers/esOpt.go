@@ -59,7 +59,7 @@ func (c *SearchController) searchContent(str string) string{
 
 
 
-//------------------------AddController
+//------------------------AddController--------------------
 
 func (c *AddContentController) clientInit() error{
 

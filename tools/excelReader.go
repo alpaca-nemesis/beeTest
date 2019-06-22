@@ -3,18 +3,20 @@ package tools
 import (
 	"context"
 	"fmt"
+	"github.com/astaxie/beego"
 	"github.com/olivere/elastic"
 	"github.com/tealeg/xlsx"
 )
 
 var ctx = context.Background()
-var esHost = "http://192.168.8.5:9200"
+var esHost = beego.AppConfig.String("eshost")
 
 type excelReader struct{
 	xlFile *xlsx.File
 	filename string
 	columnNum int
 	headers map[string][]string
+	esC *elastic.Client
 }
 
 func (eR *excelReader)getFile(fileName string) error{
@@ -78,51 +80,4 @@ func (eR *excelReader)readAll() error{
 }
 
 
-//************************esClient********************
-type esClient struct {
-	client *elastic.Client
-	flushCount int
-}
 
-
-func (c *esClient) clientInit(host string) error {
-
-	// Create a client
-	var client, err = elastic.NewClient(elastic.SetURL(host))
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-	c.client = client
-	return err
-}
-
-func (c *esClient) create(body interface{}, index string, id string) error {
-	//str := `{"user" : "olive777re", "message" : "It777's a Raggy Waltz","sex":2,"hobby":"swimming, dota"}`
-	temp := c.client.Index().
-		Index(index)
-	if id != "" {
-		temp = temp.Id(id)
-	}
-	put2, err := temp.
-		BodyJson(body).
-		Do(ctx)
-	if err != nil {
-		// Handle error
-		fmt.Println(err)
-		return err
-	}
-	c.flushCount += 1
-	if c.flushCount >= 20{
-		err = c.flush(index)
-		if err != nil{
-			return err
-		}
-	}
-	fmt.Printf("Indexed document %s to index %s, type %s\n", put2.Id, put2.Index, put2.Type)
-	return nil
-}
-
-func (c *esClient) flush(index string) error {
-	_, err := c.client.Flush().Index(index).Do(ctx)
-	return err
-}

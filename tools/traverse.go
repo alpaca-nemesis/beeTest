@@ -2,6 +2,7 @@ package tools
 
 import (
 	"fmt"
+	"github.com/astaxie/beego"
 	"io/ioutil"
 	"os"
 	"path"
@@ -10,9 +11,10 @@ import (
 
 var formats []string = []string{"docx", "pdf", "xlsx", "txt", "rtf"}
 
+var uploadDir = beego.AppConfig.String("uploaddir")
 
 func traverse() {
-	files, err := GetAllFiles("/home/crowix/go/src/beeTest/static/upload", formats)
+	files, err := GetAllFiles(uploadDir, formats)
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"fmt"
 	"github.com/astaxie/beego"
 	"io/ioutil"
 	"log"
@@ -10,21 +9,27 @@ import (
 	"strings"
 )
 
-type reader interface {
+type readerIn interface {
 	getFile(string) error
 	readAll() error
+}
+
+type reader struct {
+
 }
 
 var formats []string = []string{"docx", "pdf", "xlsx", "txt", "rtf"}
 var uploadDir = beego.AppConfig.String("uploaddir")
 
-func traverse() {
+func Traverse() error{
 	fileSuffix := ""
 	eR := excelReader{}
 	dR := docReader{}
+	eR.esC = &esClient{}
+	dR.esC = &esClient{}
 	files, err := GetAllFiles(uploadDir, formats)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	for _, file := range files{
@@ -36,12 +41,13 @@ func traverse() {
 		}
 		if err != nil{
 			log.Println(err)
+			return err
 		}
-		fmt.Println(fileSuffix)
 	}
+	return nil
 }
 
-func handler(r reader, file string)error{
+func handler(r readerIn, file string)error{
 	err := r.getFile(file)
 	if err != nil{
 		return err
@@ -51,6 +57,7 @@ func handler(r reader, file string)error{
 			return err
 		}
 	}
+	return nil
 }
 
 

@@ -2,7 +2,6 @@ package tools
 
 import (
 	"context"
-	"fmt"
 	"github.com/tealeg/xlsx"
 )
 
@@ -59,7 +58,7 @@ func (eR *excelReader)readAll() error{
 			}else{
 				for i, cell := range row.Cells{
 					ins[eR.headers[sheetName][i]] = cell.String()
-					fmt.Println(eR.headers[sheetName][i],cell.String())
+					//log.Println(eR.headers[sheetName][i],cell.String())
 				}
 				err = eR.esC.create(ins, sheetName, "")
 				if err != nil{

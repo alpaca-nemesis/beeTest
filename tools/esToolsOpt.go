@@ -1,9 +1,9 @@
 package tools
 
 import (
-	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/olivere/elastic"
+	"log"
 )
 
 //************************esClient********************
@@ -19,14 +19,20 @@ func (c *esClient) clientInit() error {
 	// Create a client
 	var client, err = elastic.NewClient(elastic.SetURL(esHost))
 	if err != nil {
-		fmt.Println("error:", err)
+		//log.Println("error:", err)
+		return err
 	}
 	c.client = client
 	return err
 }
 
 func (c *esClient) create(body interface{}, index string, id string) error {
-	//str := `{"user" : "olive777re", "message" : "It777's a Raggy Waltz","sex":2,"hobby":"swimming, dota"}`
+	if c.client == nil{
+		err := c.clientInit()
+		if err != nil{
+			return err
+		}
+	}
 	temp := c.client.Index().
 		Index(index)
 	if id != "" {
@@ -36,8 +42,6 @@ func (c *esClient) create(body interface{}, index string, id string) error {
 		BodyJson(body).
 		Do(ctx)
 	if err != nil {
-		// Handle error
-		fmt.Println(err)
 		return err
 	}
 	c.flushCount += 1
@@ -47,7 +51,7 @@ func (c *esClient) create(body interface{}, index string, id string) error {
 			return err
 		}
 	}
-	fmt.Printf("Indexed document %s to index %s, type %s\n", put2.Id, put2.Index, put2.Type)
+	log.Printf("Indexed document %s to index %s, type %s\n", put2.Id, put2.Index, put2.Type)
 	return nil
 }
 

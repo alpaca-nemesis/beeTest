@@ -17,5 +17,6 @@ func init() {
 	beego.Router("/cxk", &controllers.CXKController{})
 	beego.Router("/upload", &controllers.FileUploadController{})
 	beego.Router("/xiala", &controllers.XIALAController{})
+	beego.Router("/traverse", &controllers.TraverseController{})
 
 }

@@ -2,6 +2,8 @@ package controllers
 
 import (
 	_ "beeTest/models"
+	"beeTest/tools"
+	_ "beeTest/tools"
 	"github.com/astaxie/beego"
 	"github.com/olivere/elastic"
 	"log"
@@ -180,4 +182,19 @@ func (c *XIALAController) Get() {
 	hehe := []string{"a", "b", "c"}
 	c.Data["hehe"] = hehe
 	c.TplName = "xiala.html"
+}
+
+/*************  fileTraverse  ******************/
+type TraverseController struct {
+	beego.Controller
+}
+
+func (c *TraverseController) Get() {
+	err := tools.Traverse()
+	if err == nil{
+		c.Data["message"] = "success!!!"
+	}else {
+		c.Data["message"] = err
+	}
+	c.TplName = "message.html"
 }

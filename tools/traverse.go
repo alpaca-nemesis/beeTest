@@ -14,11 +14,8 @@ type readerIn interface {
 	readAll() error
 }
 
-type reader struct {
 
-}
-
-var formats []string = []string{"docx", "pdf", "xlsx", "txt", "rtf"}
+var formats = []string{"docx", "pdf", "xlsx", "txt", "rtf"}
 var uploadDir = beego.AppConfig.String("uploaddir")
 
 func Traverse() error{

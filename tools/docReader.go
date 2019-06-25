@@ -3,6 +3,7 @@ package tools
 import (
 	"code.sajari.com/docconv"
 	"path"
+	"strings"
 )
 
 type docReader struct{
@@ -11,6 +12,9 @@ type docReader struct{
 	docType string
 	esC *esClient
 }
+
+
+var fields = []string{"CreatedDate", "Author", "ModifiedDate"}
 
 
 func (dR *docReader) getFile(filename string) error{
@@ -29,9 +33,21 @@ func (dR *docReader) readAll() error{
 	for key, value := range dR.docFile.Meta{
 		if key == ""{
 			continue
+		}else{
+			if hasKey(fields, key){
+				ins[key] = value
+			}
 		}
-		ins[key] = value
 	}
 	err := dR.esC.create(ins, dR.docType, "")
 	return err
+}
+
+func hasKey(fields []string, key string) bool{
+	for _, field := range fields{
+		if strings.EqualFold(field, key){
+			return true
+		}
+	}
+	return false
 }
